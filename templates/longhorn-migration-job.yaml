@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: longhorn-volume-migration-{{ .Values.volumes.old.name }}
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  template:
+    metadata:
+      name: longhorn-volume-migration
+      labels:
+        name: longhorn-volume-migration
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: longhorn-volume-migration
+          image: alpine
+          command: [ "/bin/sh" ]
+          args: [ "-c", "cp -r -v /mnt/old /mnt/new" ]
+          volumeMounts:
+            - name: old-vol
+              mountPath: /mnt/old
+            - name: new-vol
+              mountPath: /mnt/new
+      volumes:
+        - name: old-vol
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.old.name }}
+        - name: new-vol
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.new.name }}

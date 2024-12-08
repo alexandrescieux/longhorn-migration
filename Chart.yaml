@@ -1,0 +1,8 @@
+apiVersion: v2
+name: longhorn-migration
+version: 1.0.0
+description: Migration tool from local StorageClass to Longhorn StorageClass
+type: application
+keywords:
+  - longhorn
+  - migration

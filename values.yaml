@@ -1,0 +1,5 @@
+volumes:
+  old:
+    name: old-pvc
+  new:
+    name: new-pvc
